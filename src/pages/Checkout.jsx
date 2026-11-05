@@ -1,0 +1,12 @@
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useShop } from '../context/ShopContext'
+export default function Checkout() {
+  const { cart } = useShop()
+  const [done,setDone]=useState(false)
+  const navigate=useNavigate()
+  const total=cart.reduce((s,p)=>s+p.price*p.quantity,0)
+  if(done) return <main className="container-page py-24 text-center"><p className="eyebrow text-rose">Thank you</p><h1 className="mt-3 font-display text-4xl">Order request received</h1><p className="mt-4 text-muted">This is a demo confirmation. No real order was submitted.</p><Link to="/shop" className="btn-primary mt-8">Continue shopping</Link></main>
+  if(!cart.length) return <main className="container-page py-24 text-center"><h1 className="font-display text-3xl">Your bag is empty</h1><Link to="/shop" className="btn-primary mt-6">Shop now</Link></main>
+  return <main className="container-page max-w-3xl py-12"><p className="eyebrow text-rose">Almost yours</p><h1 className="mt-3 font-display text-4xl">Checkout</h1><form onSubmit={e=>{e.preventDefault();setDone(true)}} className="mt-8 grid gap-8 md:grid-cols-[1fr_260px]"><div className="space-y-4"><h2 className="font-semibold">Contact & delivery</h2><input required className="field" placeholder="Full name"/><input required type="email" className="field" placeholder="Email address"/><input required className="field" placeholder="Phone number"/><input required className="field" placeholder="Delivery address"/><input required className="field" placeholder="City"/><label className="block text-sm font-medium">Payment method<select className="field mt-2"><option>Cash on delivery</option><option>Bank transfer (demo)</option></select></label><button className="btn-primary w-full">Place demo order</button></div><aside className="h-fit rounded-2xl bg-cream p-5"><h2 className="font-display text-xl">Summary</h2>{cart.map(p=><div key={p.id} className="mt-3 flex justify-between gap-3 text-xs"><span>{p.name} × {p.quantity}</span><span>${(p.price*p.quantity).toFixed(2)}</span></div>)}<div className="mt-5 border-t border-line pt-4 flex justify-between font-semibold"><span>Total</span><span>${total.toFixed(2)}</span></div></aside></form></main>
+}

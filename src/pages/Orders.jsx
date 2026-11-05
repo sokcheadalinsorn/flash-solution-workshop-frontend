@@ -1,0 +1,2 @@
+import { Link } from 'react-router-dom'
+export default function Orders(){return <main className="container-page min-h-[55vh] py-16"><p className="eyebrow text-rose">Your account</p><h1 className="mt-3 font-display text-4xl">Order history</h1><div className="mt-8 rounded-2xl border border-line p-8 text-center"><p className="text-muted">Sign in to view your orders. This demo does not yet load order history from a backend.</p><Link to="/login" className="btn-primary mt-5">Sign in</Link></div></main>}
