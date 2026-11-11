@@ -64,6 +64,7 @@ export default function Home() {
           <div className="relative mx-auto w-full max-w-[610px]">
             <div className="absolute -inset-5 rounded-[48%_48%_20px_20px] border border-gold/60"></div>
             <div className="relative overflow-hidden rounded-[48%_48%_18px_18px] bg-[#E4E8D5] shadow-luxe">
+              {/* img hero secion API Endpoints*/}
               <img
                 src="/images/hero.svg"
                 alt="Lumière Beauty skincare and makeup collection"
@@ -122,6 +123,7 @@ export default function Home() {
             View all <ArrowRight size={16} />
           </Link>
         </div>
+        {/* categories section API Endpoints*/}
         <div className="mt-8 grid gap-5 md:grid-cols-3">
           {categories.map((item) => (
             <Link
@@ -167,6 +169,7 @@ export default function Home() {
             Shop all <ArrowRight size={16} />
           </Link>
         </div>
+        {/* Beauty worth discovering API Endpoints*/}
         <div className="container-page mt-9 grid grid-cols-2 gap-x-5 gap-y-9 md:grid-cols-4">
           {featured.map((p) => (
             <ProductCard key={p.id} product={p} />
@@ -194,6 +197,7 @@ export default function Home() {
             Discover our story <ArrowRight size={16} />
           </Link>
         </div>
+        {/* make space for yourself API Endpoints*/}
         <div className="grid grid-cols-2 gap-4">
           <img
             src="/images/cleanser.svg"
