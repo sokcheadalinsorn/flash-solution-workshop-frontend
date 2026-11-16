@@ -19,7 +19,7 @@ const empty = {
 export default function AdminProductForm() {
   const { id } = useParams();
   const editing = Boolean(id);
-  const { products, saveProduct } = useShop();
+  const { products, saveProduct, updateProduct } = useShop();
   const navigate = useNavigate();
   const [form, setForm] = useState(empty);
   const [error, setError] = useState("");
@@ -37,66 +37,55 @@ export default function AdminProductForm() {
     const { name, value, type, checked } = e.target;
     setForm((f) => ({ ...f, [name]: type === "checkbox" ? checked : value }));
   };
-  // const submit = (e) => {
-  //   e.preventDefault();
-  //   if (!form.name.trim() || !form.price || !form.stock) {
-  //     setError("Please complete the product name, price and stock.");
-  //     return;
-  //   }
-  //   const product = {
-  //     ...form,
-  //     id: editing ? id : `P-${Date.now().toString().slice(-6)}`,
-  //     price: Number(form.price),
-  //     stock: Number(form.stock),
-  //   };
-  //   saveProduct(product);
-  //   navigate("/admin/products");
-  // };
-
+  
   // replace all above these code to :
   const submit = async (e) => {
     e.preventDefault();
     setError("");
 
-    // Validate required fields
+    // Step 1: Validate required fields
     if (!form.name.trim() || form.price === "" || form.stock === "") {
       setError("Please complete the product name, price and stock.");
       return;
     }
 
-    // Keep existing local edit behavior for now.
-    // We will connect PUT separately.
-    if (editing) {
-      const product = {
-        ...form,
-        id,
-        price: Number(form.price),
-        stock: Number(form.stock),
-      };
-
-      saveProduct(product);
-      navigate("/admin/products");
-      return;
-    }
-
     try {
+      // Step 2: Prevent multiple submissions
       setSaving(true);
 
-      // Prepare product data for Spring Boot(This prepares the JSON that Spring Boot expects.)
+      // Step 3: Prepare data for Spring Boot
       const productData = {
         name: form.name.trim(),
         description: form.description,
         price: Number(form.price),
         stock_quanity: Number(form.stock),
-        imageUrl: form.imageUrl.trim() || null,
+        imageUrl: form.imageUrl.trim(),
+        sku: form.sku ?? "",
       };
 
-      // POST request using trainer's Axios service
+      // EDIT PRODUCT - PUT REQUEST
+      if (editing) {
+        console.log("Updating product ID:", id);
+        console.log("Updated product data:", productData);
+
+        // Send PUT request through ShopContext
+        const updatedProduct = await updateProduct(id, productData);
+
+        console.log("Product updated successfully:", updatedProduct);
+
+        alert("Product updated successfully!");
+
+        navigate("/admin/products");
+        return;
+      }
+
+      // CREATE PRODUCT - POST REQUEST
+      // Keep your existing POST functionality
       const createdProduct = await productApi.create(productData);
 
       console.log("Product created successfully:", createdProduct);
 
-      // Convert the response to the frontend product format
+      // Convert response to frontend product format
       const newProduct = {
         ...createdProduct,
 
@@ -109,28 +98,32 @@ export default function AdminProductForm() {
         brand: createdProduct.brand?.name ?? "",
         category: createdProduct.category?.name ?? "",
 
-        imageUrl: createdProduct.imageUrl || "/images/serum.svg",
+        imageUrl: createdProduct.imageUrl ?? createdProduct.image_url ?? "",
 
         status: createdProduct.status ?? "Active",
         featured: createdProduct.featured ?? false,
       };
 
-      // Update the existing React product list(Save the new product in React state)
-      saveProduct(newProduct);
+      // Update React state
+      await saveProduct(newProduct);
 
-      // Redirect after successful POST(This happens only after the API request succeeds.)
+      alert("Product created successfully!");
+
       navigate("/admin/products");
     } catch (error) {
-      console.error("Failed to create product:", error);
+      console.error("Failed to save product:", error);
 
       setError(
         error.response?.data?.message ||
-          "Failed to create product. Please check your backend.",
+          error.message ||
+          "Failed to save product. Please check your backend.",
       );
     } finally {
+      // Step 4: Enable the save button again
       setSaving(false);
     }
   };
+
   return (
     <>
       <Link

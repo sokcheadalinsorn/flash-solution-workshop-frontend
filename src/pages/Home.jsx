@@ -13,19 +13,19 @@ import ProductCard from "../components/ProductCard";
 const categories = [
   {
     name: "Skincare",
-    image: "/images/serum.svg",
+    image: "/images/serum-ordinary.jpg",
     tone: "bg-[#ECEBDD]",
     description: "Daily rituals, thoughtfully chosen",
   },
   {
     name: "Makeup",
-    image: "/images/blush.svg",
+    image: "/images/blush-dior.jpg",
     tone: "bg-[#E4E8D5]",
     description: "Color that feels like you",
   },
   {
     name: "Beauty Tools",
-    image: "/images/fragrance.svg",
+    image: "/images/perfume-dior.jpg",
     tone: "bg-[#F0EFE3]",
     description: "The finishing touches",
   },
@@ -66,7 +66,7 @@ export default function Home() {
             <div className="relative overflow-hidden rounded-[48%_48%_18px_18px] bg-[#E4E8D5] shadow-luxe">
               {/* img hero secion API Endpoints*/}
               <img
-                src="/images/hero.svg"
+                src="/images/hero.jpg"
                 alt="Lumière Beauty skincare and makeup collection"
                 className="aspect-[5/4] w-full object-cover"
               />
