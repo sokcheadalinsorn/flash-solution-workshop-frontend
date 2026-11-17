@@ -200,12 +200,12 @@ export default function Home() {
         {/* make space for yourself API Endpoints*/}
         <div className="grid grid-cols-2 gap-4">
           <img
-            src="/images/cleanser.svg"
+            src="/images/cleanser-ordinary.jpg"
             alt="Skincare essentials"
             className="h-64 w-full rounded-2xl bg-cream object-cover"
           />
           <img
-            src="/images/blush.svg"
+            src="/images/blush-fenty.jpg"
             alt="Makeup essentials"
             className="mt-9 h-64 w-full rounded-2xl bg-blush object-cover"
           />
