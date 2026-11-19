@@ -17,6 +17,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminProducts from "./pages/AdminProducts";
 import AdminProductForm from "./pages/AdminProductForm";
 import AdminUsers from "./pages/AdminUsers";
+import Profile from "./pages/Profile";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -29,17 +30,53 @@ function ScrollToTop() {
 
   return null;
 }
+
+function RequireCheckoutLogin({ children }) {
+  const location = useLocation();
+
+  let user = null;
+
+  try {
+    user = JSON.parse(localStorage.getItem("user") || "null");
+  } catch {
+    user = null;
+  }
+
+  // Customer is not logged in
+  if (!user?.userId) {
+    return (
+      <Navigate
+        to="/login"
+        replace
+        state={{ from: location.pathname }}
+      />
+    );
+  }
+
+  // Customer is logged in
+  return children;
+}
 function StoreLayout() {
   return (
     <>
       <Header />
       <Routes>
+        <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/" element={<Home />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/products/:id" element={<ProductDetail />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout" element={<Checkout />} />
+        {/* <Route path="/checkout" element={<Checkout />} /> change to :*/}
+        <Route
+          path="/checkout"
+            element={
+          <RequireCheckoutLogin>
+            <Checkout />
+          </RequireCheckoutLogin>
+        }
+        />
         <Route path="/login" element={<Auth />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/register" element={<Auth register />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/about" element={<About />} />
