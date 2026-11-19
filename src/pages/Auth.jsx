@@ -20,6 +20,8 @@ export default function Auth({ register = false }) {
   const [message, setMessage] = useState("");
 
   const handleSubmit = async (e) => {
+    // add cosole.log
+    console.log("STEP 1: Login form submitted!");
     e.preventDefault();
 
     setLoading(true);
@@ -56,8 +58,18 @@ export default function Auth({ register = false }) {
           password,
         });
 
+        // add console.log
+        console.log("STEP 2: Login API successful!", {
+          userId: response.userId,
+          role: response.role,
+        });
+
         // Save user information
         localStorage.setItem("user", JSON.stringify(response));
+        console.log(
+          "User saved successfully:",
+          Boolean(localStorage.getItem("user")),
+        );
 
         setMessage(response.message || "Login successful!");
 
@@ -73,7 +85,7 @@ export default function Auth({ register = false }) {
           if (response.role === "ADMIN") {
             navigate("/admin");
           } else {
-            navigate(from || "/");
+            navigate(from || "/profile");
           }
         }, 1000);
       }

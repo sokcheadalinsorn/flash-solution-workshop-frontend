@@ -91,11 +91,18 @@ export const brandApi = {
   },
 };
 
+
+// I had replaced new update this a whole
 export const authApi = {
   // POST /api/auth/login
   async login(credentials) {
     try {
-      const response = await apiClient.post("/auth/login", credentials);
+      const response = await apiClient.post(
+        "/auth/login",
+        credentials,
+        { withCredentials: true }
+      );
+
       return response.data;
     } catch (error) {
       console.error("Login failed:", error);
@@ -106,12 +113,51 @@ export const authApi = {
   // POST /api/auth/register
   async register(accountData) {
     try {
-      const response = await apiClient.post("/auth/register", accountData);
+      const response = await apiClient.post(
+        "/auth/register",
+        accountData,
+        { withCredentials: true }
+      );
+
       return response.data;
     } catch (error) {
       console.error("Registration failed:", error);
       throw error;
     }
+  },
+
+  // POST /api/auth/logout
+  async logout() {
+    const response = await apiClient.post(
+      "/auth/logout",
+      {},
+      { withCredentials: true }
+    );
+
+    return response.data;
+  },
+};
+
+// new add update code a whole
+export const profileApi = {
+  // GET /api/users/me
+  async getMe() {
+    const response = await apiClient.get("/users/me", {
+      withCredentials: true,
+    });
+
+    return response.data;
+  },
+
+  // PUT /api/users/me
+  async updateProfile(profileData) {
+    const response = await apiClient.put(
+      "/users/me",
+      profileData,
+      { withCredentials: true }
+    );
+
+    return response.data;
   },
 };
 

@@ -1,4 +1,5 @@
-import { Routes, Route, useLocation } from "react-router-dom";
+// import { Routes, Route, useLocation } from "react-router-dom"; replace it to this 1 line:
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { useLayoutEffect } from "react";
 import { ShopProvider } from "./context/ShopContext";
 import Header from "./components/Header";
