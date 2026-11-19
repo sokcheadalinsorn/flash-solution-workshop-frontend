@@ -161,11 +161,18 @@ export const profileApi = {
   },
 };
 
+
+// repalce all a wholde code 
 export const orderApi = {
   // POST /api/orders
   async create(orderData) {
     try {
-      const response = await apiClient.post("/orders", orderData);
+      const response = await apiClient.post(
+        "/orders",
+        orderData,
+        { withCredentials: true }
+      );
+
       return response.data;
     } catch (error) {
       console.error("Unable to create order:", error);
@@ -176,7 +183,11 @@ export const orderApi = {
   // GET /api/orders/my
   async getMyOrders() {
     try {
-      const response = await apiClient.get("/orders/my");
+      const response = await apiClient.get(
+        "/orders/my",
+        { withCredentials: true }
+      );
+
       return response.data;
     } catch (error) {
       console.error("Unable to load orders:", error);
