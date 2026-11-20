@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, Save } from "lucide-react";
 import { useShop } from "../context/ShopContext";
 import { productApi } from "../services/api";
-
+import { categoryApi } from "../services/api";
 const empty = {
   id: "",
   name: "",
@@ -31,36 +31,26 @@ export default function AdminProductForm() {
   const [categories, setCategories] = useState([]);
 
   // ADDED: CATEGORY - Fetch categories from Spring Boot
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const baseUrl = (
-          import.meta.env.VITE_API_URL || "http://localhost:8080"
-        ).replace(/\/$/, "");
+useEffect(() => {
+  const fetchCategories = async () => {
+    try {
+      const data = await categoryApi.getAll();
 
-        const response = await fetch(`${baseUrl}/api/categories`);
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch categories");
-        }
-
-        const data = await response.json();
-
-        if (!Array.isArray(data)) {
-          throw new Error("Invalid categories response");
-        }
-
-        setCategories(data);
-
-        console.log("Categories from backend:", data);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-        setError("Unable to load categories from backend.");
+      if (!Array.isArray(data)) {
+        throw new Error("Invalid categories response");
       }
-    };
 
-    fetchCategories();
-  }, []);
+      setCategories(data);
+
+      console.log("Categories loaded successfully:", data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+      setError("Unable to load categories from backend.");
+    }
+  };
+
+  fetchCategories();
+}, []);
 
   // LOAD PRODUCT WHEN EDITING
   useEffect(() => {
@@ -238,25 +228,25 @@ export default function AdminProductForm() {
 
           {/* CATEGORY - FETCHED FROM POSTGRESQL */}
           <label className="text-xs font-semibold">
-            Category
-            <select
-              className="field mt-2"
-              name="category"
-              value={form.category}
-              onChange={change}
-              disabled={categories.length === 0}
-            >
-              {categories.length === 0 && (
-                <option value="">No categories available</option>
-              )}
+  Category
+  <select
+    className="field mt-2"
+    name="category"
+    value={form.category}
+    onChange={change}
+    disabled={categories.length === 0}
+  >
+    {categories.length === 0 && (
+      <option value="">No categories available</option>
+    )}
 
-              {categories.map((category) => (
-                <option key={category.id} value={category.name}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-          </label>
+    {categories.map((category) => (
+      <option key={category.id} value={category.name}>
+        {category.name}
+      </option>
+    ))}
+  </select>
+</label>
 
           <label className="text-xs font-semibold">
             Price (USD) *
