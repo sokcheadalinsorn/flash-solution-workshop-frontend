@@ -31,26 +31,26 @@ export default function AdminProductForm() {
   const [categories, setCategories] = useState([]);
 
   // ADDED: CATEGORY - Fetch categories from Spring Boot
-useEffect(() => {
-  const fetchCategories = async () => {
-    try {
-      const data = await categoryApi.getAll();
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await categoryApi.getAll();
 
-      if (!Array.isArray(data)) {
-        throw new Error("Invalid categories response");
+        if (!Array.isArray(data)) {
+          throw new Error("Invalid categories response");
+        }
+
+        setCategories(data);
+
+        console.log("Categories loaded successfully:", data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        setError("Unable to load categories from backend.");
       }
+    };
 
-      setCategories(data);
-
-      console.log("Categories loaded successfully:", data);
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-      setError("Unable to load categories from backend.");
-    }
-  };
-
-  fetchCategories();
-}, []);
+    fetchCategories();
+  }, []);
 
   // LOAD PRODUCT WHEN EDITING
   useEffect(() => {
@@ -228,25 +228,25 @@ useEffect(() => {
 
           {/* CATEGORY - FETCHED FROM POSTGRESQL */}
           <label className="text-xs font-semibold">
-  Category
-  <select
-    className="field mt-2"
-    name="category"
-    value={form.category}
-    onChange={change}
-    disabled={categories.length === 0}
-  >
-    {categories.length === 0 && (
-      <option value="">No categories available</option>
-    )}
+            Category
+            <select
+              className="field mt-2"
+              name="category"
+              value={form.category}
+              onChange={change}
+              disabled={categories.length === 0}
+            >
+              {categories.length === 0 && (
+                <option value="">No categories available</option>
+              )}
 
-    {categories.map((category) => (
-      <option key={category.id} value={category.name}>
-        {category.name}
-      </option>
-    ))}
-  </select>
-</label>
+              {categories.map((category) => (
+                <option key={category.id} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </label>
 
           <label className="text-xs font-semibold">
             Price (USD) *
